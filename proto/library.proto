@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package grpc_gen;
+
+
+service LibraryService {
+    //Books
+    rpc CreateBook (CreateBookRequest) returns (Book);
+    rpc ListBooks (Empty) returns (BookList);
+
+    //members
+    rpc CreateMember (CreateMemberRequest) returns (Member);
+
+    //borrow
+    rpc BorrowBook (BorrowBookRequest) returns (BorrowResponse);
+    rpc ReturnBook (ReturnBookRequest) returns (ReturnResponse);
+
+    //queries
+    rpc ListBorrowBookByMember (MemberId) returns (BorrowedBookList);
+}
+
+
+
+message Book {
+    int32 id = 1;
+    string title = 2;
+    string author = 3;
+    int32 available_copies = 4;
+}
+
+message CreateBookRequest {
+    string title = 1;
+    string author = 2;
+    int32 copies = 3;
+}
+
+message BookList {
+    repeated Book books = 1; 
+}
+
+message Member {
+    int32 id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message CreateMemberRequest {
+    string name = 1;
+    string email =2;
+}
+
+message BorrowBookRequest {
+    int32 book_id = 1;
+    int32 member_id = 2;
+}
+
+message BorrowResponse {
+    string message = 1;
+}
+
+message ReturnBookRequest {
+  int32 borrowing_id = 1;
+}
+
+message ReturnResponse {
+  string message = 1;
+}
+
+message MemberId {
+    int32 member_id = 1;
+}
+
+message BorrowedBook {
+  int32 borrowing_id = 1;
+  string title = 2;
+  string borrow_date = 3;
+  string return_date = 4;
+}
+
+message BorrowedBookList {
+     repeated BorrowedBook items = 1;
+}
+
+message Empty {}

@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: library_db
+  library-service:
+    build:
+      context: .
+      dockerfile: ./library_service/Dockerfile
+    # volumes:
+    #   - ./library_service:/app
+    ports:
+      - "50051:50051"
+    depends_on:
+      - db
+    restart: always
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api_gateway/Dockerfile
+    environment:
+      PYTHONPATH: /app
+    volumes:
+      - ./api_gateway:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - library-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    # volumes:
+    #   - ./frontend:/app
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    depends_on:
+      - api-gateway

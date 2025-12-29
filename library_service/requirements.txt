@@ -1,0 +1,13 @@
+# gRPC
+grpcio
+grpcio-tools
+
+# Database
+SQLAlchemy==2.0.30
+psycopg2-binary==2.9.9
+
+# Migrations (recommended)
+alembic==1.13.1
+
+# Environment config
+python-dotenv==1.0.1
